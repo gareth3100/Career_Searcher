@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import django_heroku
+import dj_database_url
+from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -48,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
 ]
 
 ROOT_URLCONF = 'RealJobApp.urls'
@@ -125,6 +129,8 @@ STATICFILES_DIRS = [
     #join it to our base directory (BASE_DIR is defined at the beginning)
 ]
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
 #Email settings
@@ -132,8 +138,10 @@ EMAIL_HOST = 'smtp.gmail.com' #using gmail
 EMAIL_PORT = 587 #port that gmail uses
 EMAIL_HOST_USER = 'garethsamadhana@gmail.com'
 EMAIL_HOST_PASSWORD = '' #look up django environmental variable to mask the password
-EMAIL_USE_TLS = False #security stuff
+EMAIL_USE_TLS = True #security stuff
 #EMAIL_USE_SSL = False #security stuff
 
 #https://accounts.google.com/b/0/DisplayUnlockCaptcha
 #https://myaccount.google.com/lesssecureapps?pli=1
+
+django_heroku.settings(locals())
