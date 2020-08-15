@@ -1,18 +1,20 @@
 """urls for the homepage"""
 from django.urls import path
 from . import views
+from .views import index
+#from .views import ArticleDetails, ArticleAPIView
 
 urlpatterns = [
     path('', views.index, name="index"), #this stuff is what dictates the URL
-    path('contact/', views.contact, name="contact"),
     path('job-listings/', views.job_listings, name="job-listings"),
     path('job-single/', views.job_single, name="job-single"),
-    path('post-job/', views.post_job, name="post-job"),
     path('login/', views.login, name="login"),
-    path('services/', views.services, name="services"),
-    path('service-single/', views.service_single, name="service-single"),
     path('about/', views.about, name="about"),
-    
+    path('saved-jobs/', views.saved_jobs, name="saved-jobs"),
+    #path('job-single/', Job_Title) #this is for the url for specific job types when looking things up
+    #path('article/', article_list),
+    #path('detail/<int:id>/', ArticleDetails.as_view()),
+    #path('article/', ArticleAPIView.as_view())
 
-    
 ]
+

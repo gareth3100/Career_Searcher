@@ -1,63 +1,29 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Job Listings{% endblock %}
-{% block meta_description %}This is the job listings page{% endblock %} 
+{% block title %}Saved Jobs{% endblock %}
+{% block meta_description %}This is the Jobs Saved page{% endblock %} 
 {% block content %}
+
     <!-- HOME -->
-  <section class="section-hero home-section overlay inner-page bg-image" style="background-image: url({% static 'home/images/hero_1.jpg' %});" id="home-section">
+    <section class="section-hero overlay inner-page bg-image" style="background-image: url({% static 'home/images/hero_1.jpg' %});" id="home-section">
       <div class="container">
-        <div class="row align-items-center justify-content-center">
-          <div class="col-md-12">
-            <div class="mb-5 text-center">
-              <h1 class="text-white font-weight-bold">The Easiest Way To Get Your Dream Job</h1>
-              <p>Input your job preferences below to view all available jobs instantly!</p>
+        <div class="row">
+          <div class="col-md-7">
+            <h1 class="text-white font-weight-bold">Saved Jobs</h1>
+            <div class="custom-breadcrumbs">
+              <a href="#">Home</a> <span class="mx-2 slash">/</span>
+              <span class="text-white"><strong>Saved Jobs</strong></span>
             </div>
-            <form method="post" class="search-jobs-form">
-              {% csrf_token %}
-              <div class="row mb-5">
-                <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                  <input type="text" class="form-control form-control-lg" name="Job_Title" placeholder="Job title, Company...">
-                </div>
-                <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                  <input type="text" class="form-control form-control-lg" name="Job_Area" placeholder="State, City, Region...">
-                </div>
-                <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                  <select class="selectpicker" data-style="btn-white btn-lg" name="Job_Type" data-width="100%" data-live-search="true" title="Select Job Type">
-                    <option>Internship</option>
-                    <option>Part Time</option>
-                    <option>Full Time</option>
-                  </select>
-                </div>
-                <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                  <button type="submit" class="btn btn-primary btn-lg btn-block text-white btn-search"><span class="icon-search icon mr-2"></span>Search Job</button>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12 popular-keywords">
-                  <h3>Trending Keywords:</h3>
-                  <ul class="keywords list-unstyled m-0 p-0">
-                    <li><a href="#" class="">UI Designer</a></li>
-                    <li><a href="#" class="">Python</a></li>
-                    <li><a href="#" class="">Developer</a></li>
-                  </ul>
-                </div>
-              </div>
-            </form>
           </div>
         </div>
       </div>
-
-      <a href="#next" class="scroll-button smoothscroll">
-        <span class=" icon-keyboard_arrow_down"></span>
-      </a>
     </section>
 
-    
     <section class="site-section" id="next">
       <div class="container">
         <div class="row mb-5 justify-content-center">
           <div class="col-md-7 text-center">
-            <h2 class="section-title mb-2">43,337 Jobs Listed</h2>
+            <h2 class="section-title mb-2"># Jobs Saved</h2>
           </div>
         </div>
         
@@ -200,10 +166,6 @@
               </div>
             </div>
           </li>
-
-          
-
-          
         </ul>
 
         <div class="row pagination-wrap">
@@ -223,22 +185,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </section>
-    
-    <section class="py-5 bg-image overlay-primary fixed overlay" style="background-image: url({% static 'home/images/hero_1.jpg' %});">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-md-8">
-            <h2 class="text-white">Want to Keep track of your jobs?</h2>
-            <p class="mb-0 text-white lead">Make an account to be able to save jobs you're interested in!</p>
-          </div>
-          <div class="col-md-3 ml-auto">
-            <a href="#" class="btn btn-warning btn-block btn-lg">Sign Up</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-{% endblock %}
+    {% endblock content %}
