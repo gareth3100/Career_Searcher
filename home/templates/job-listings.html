@@ -78,7 +78,11 @@
                 <strong>{{ job_descriptions.company|striptags }}</strong>
               </div>
               <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
+                {% if job_descriptions.has_city == True %}
                 <span class="icon-room"></span> {{ job_descriptions.job_location|striptags }}, {{ job_descriptions.job_area|striptags }}
+                {% else %}
+                <span class="icon-room"></span> {{ job_descriptions.job_area|striptags }}
+                {% endif %}
               </div>
               <div class="job-listing-meta">
                 {% if job_descriptions.job_type == 'part_time' %}

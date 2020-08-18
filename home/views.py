@@ -31,18 +31,34 @@ def index(request):
         counter = 0
 
         for job in job_query_result['results']:
-            job_descriptions = {
+            try:
+                job_descriptions = {
 
                 'job_title' : job_query_result['results'][counter]['title'],
-                'job_location' : job_query_result['results'][counter]['location']['area'][3],
-                'job_area' : job_query_result['results'][counter]['location']['area'][1],
+                'job_location' : job_query_result['results'][counter]['location']['area'][3], #this is the city
+                'job_area' : job_query_result['results'][counter]['location']['area'][1], #this is the state
                 'creation_date' : job_query_result['results'][counter]['created'],
                 'company' : job_query_result['results'][counter]['company']['display_name'],
                 'redirect_url' : job_query_result['results'][counter]['redirect_url'],
                 'job_description' : job_query_result['results'][counter]['description'],
                 'job_type' : job_query_result['results'][counter]['contract_time'],
+                'has_city' : True
 
-            }
+                } 
+            except IndexError: #in case they input a state
+                job_descriptions = {
+
+                    'job_title' : job_query_result['results'][counter]['title'],
+                    #'job_location' : job_query_result['results'][counter]['location']['area'][3], #this is the city
+                    'job_area' : job_query_result['results'][counter]['location']['area'][1], #this is the state
+                    'creation_date' : job_query_result['results'][counter]['created'],
+                    'company' : job_query_result['results'][counter]['company']['display_name'],
+                    'redirect_url' : job_query_result['results'][counter]['redirect_url'],
+                    'job_description' : job_query_result['results'][counter]['description'],
+                    'job_type' : job_query_result['results'][counter]['contract_time'],
+                    'has_city' : False
+
+                }
             counter += 1 #move on to next job
             job_data.append(job_descriptions) #add all that to a list of dicts we're calling "job_data"
         
