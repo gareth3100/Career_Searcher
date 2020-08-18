@@ -12,9 +12,6 @@ urlpatterns = [
     path('about/', views.about, name="about"),
     path('saved-jobs/', views.saved_jobs, name="saved-jobs"),
     #path('job-single/', Job_Title) #this is for the url for specific job types when looking things up
-    #path('article/', article_list),
-    #path('detail/<int:id>/', ArticleDetails.as_view()),
-    #path('article/', ArticleAPIView.as_view())
 
 ]
 
