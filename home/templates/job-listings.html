@@ -45,10 +45,6 @@
           </div>
         </div>
       </div>
-
-      <a href="#next" class="scroll-button smoothscroll">
-        <span class=" icon-keyboard_arrow_down"></span>
-      </a>
     </section>
 
     
@@ -67,7 +63,7 @@
         <ul class="job-listings mb-5">
           {% for job_descriptions in job_data %}
           <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="{% url 'job-single' %}"></a>
+            <a target="_blank" href="{{ job_descriptions.redirect_url }}"></a>
             <div class="job-listing-logo">
               <img src='' alt="Image" class="img-fluid">
             </div>

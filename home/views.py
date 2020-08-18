@@ -44,7 +44,8 @@ def index(request):
                 'job_type' : job_query_result['results'][counter]['contract_time'],
                 'has_city' : True
 
-                } 
+                }
+                
             except IndexError: #in case they input a state
                 job_descriptions = {
 
@@ -146,10 +147,6 @@ def job_listings(request):
         return render(request, 'job-listings.html', context) #can only pass in dicts so that's why we set a dict to job_data
 
     return render(request, 'index.html')
-
-def job_single(request):
-    """returns the job-single page"""
-    return render(request, 'job-single.html', {})
 
 def login(request):
     """returns the login page"""
