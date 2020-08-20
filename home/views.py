@@ -9,7 +9,7 @@ from django.core.mail import send_mail
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.urls import reverse
-from .forms import RegisterForm
+from .forms import MyUserCreationForm
 
 def index(request):
     """returns the base page"""
@@ -137,19 +137,19 @@ def job_listings(request):
 def signup(request):
     """returns the signup page"""
     if request.method == 'POST':
-        form = RegisterForm(request.POST)
+        form = MyUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Sign up successful. Welcome!")
             return redirect('/') #this is how to change url completely
     else:
-        form = RegisterForm()
+        form = MyUserCreationForm()
     context = {'form' : form}
     return render(request, 'signup.html', context)
 
 def log_in(request):
     """returns the login page"""
-    form = RegisterForm()
+    form = MyUserCreationForm()
     context = {'form' : form}
     messages.success(request, "Successfully logged in. Welcome back!")
     return render(request, 'login.html', context)
