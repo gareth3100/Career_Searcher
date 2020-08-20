@@ -52,22 +52,18 @@
       <div class="container">
         <div class="row mb-5 justify-content-center">
           <div class="col-md-7 text-center">
-            {% if counter == 0 %}
-            <h2 class="section-title mb-2">No results found.</h2>
-            {% else %}
-            <h2 class="section-title mb-2">{{ counter }} result(s) found.</h2>
+              {% if total_jobs == 0 %}
+              <h2 class="section-title mb-2">No results found.</h2>
+              {% else %}
+              <h2 class="section-title mb-2">{{ total_jobs }} result(s) found.</h2>
           </div>
         </div>
         
         
         <ul class="job-listings mb-5">
           {% for job_descriptions in job_data %}
-          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
+          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-1 pt-sm-1 align-items-center">
             <a target="_blank" href="{{ job_descriptions.redirect_url }}"></a>
-            <div class="job-listing-logo">
-              <img src='' alt="Image" class="img-fluid">
-            </div>
-
             <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
               <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
                 <h2>{{ job_descriptions.job_title|striptags }}</h2>
@@ -95,10 +91,10 @@
 
         <div class="row pagination-wrap">
           <div class="col-md-6 text-center text-md-left mb-4 mb-md-0">
-            {% if counter < 7%}
-            <span>Showing 1-{{ counter }} of {{counter}} job(s)</span>
+            {% if total_jobs > 1 %}
+            <span>Showing 1-10 of {{total_jobs}} jobs</span>
             {% else %}
-            <span>Showing 1-7 of {{counter}} jobs</span>
+            <span>Showing 1-10 of {{total_jobs}} job</span>
             {% endif %}
           </div>
           <div class="col-md-6 text-center text-md-right">
@@ -122,7 +118,7 @@
       <div class="container">
         <div class="row align-items-center">
           <div class="col-md-8">
-            <h2 class="text-white">Want to Keep track of your jobs?</h2>
+            <h2 class="text-white">Want to keep track of jobs?</h2>
             <p class="mb-0 text-white lead">Make an account to be able to save jobs you're interested in!</p>
           </div>
           <div class="col-md-3 ml-auto">

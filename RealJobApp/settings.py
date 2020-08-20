@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
     'home',
 ]
 
@@ -133,15 +134,9 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
-#Email settings
-EMAIL_HOST = 'smtp.gmail.com' #using gmail
-EMAIL_PORT = 587 #port that gmail uses
-EMAIL_HOST_USER = 'garethsamadhana@gmail.com'
-EMAIL_HOST_PASSWORD = '' #look up django environmental variable to mask the password
-EMAIL_USE_TLS = True #security stuff
-#EMAIL_USE_SSL = False #security stuff
-
-#https://accounts.google.com/b/0/DisplayUnlockCaptcha
-#https://myaccount.google.com/lesssecureapps?pli=1
-
 django_heroku.settings(locals())
+
+CRISPY_TEMPLATE_PACK="bootstrap4"
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

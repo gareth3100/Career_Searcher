@@ -3,7 +3,6 @@
 {% block title %}Saved Jobs{% endblock %}
 {% block meta_description %}This is the Jobs Saved page{% endblock %} 
 {% block content %}
-
     <!-- HOME -->
     <section class="section-hero overlay inner-page bg-image" style="background-image: url({% static 'home/images/hero_1.jpg' %});" id="home-section">
       <div class="container">
@@ -22,6 +21,7 @@
     <section class="site-section" id="next">
       <div class="container">
         <div class="row mb-5 justify-content-center">
+          {% if user.is_authenticated %}
           <div class="col-md-7 text-center">
             <h2 class="section-title mb-2"># Jobs Saved</h2>
           </div>
@@ -29,11 +29,7 @@
         
         <ul class="job-listings mb-5">
           <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="{% url 'job-single' %}"></a>
-            <div class="job-listing-logo">
-              <img src="{% static 'home/images/job_logo_1.jpg' %}" alt="Image" class="img-fluid">
-            </div>
-
+            <a href=""></a>
             <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
               <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
                 <h2>{{ job_descriptions.job_title|striptags }}</h2>
@@ -43,134 +39,22 @@
                 <span class="icon-room"></span> {{ job_descriptions.job_location|striptags }}, {{ job_descriptions.job_area|striptags }}
               </div>
               <div class="job-listing-meta">
+                {% if job_descriptions.job_type == 'part_time' %}
                 <span class="badge badge-danger">Part Time</span>
-              </div>
-            </div>
-            
-          </li>
-          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="{% url 'job-single' %}"></a>
-            <div class="job-listing-logo">
-              <img src="{% static 'home/images/job_logo_2.jpg' %}" alt="Image" class="img-fluid">
-            </div>
-
-            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
-              <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2>Digital Marketing Director</h2>
-                <strong>Sprint</strong>
-              </div>
-              <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span class="icon-room"></span> Overland Park, Kansas 
-              </div>
-              <div class="job-listing-meta">
+                {% elif job_descriptions.job_type == 'full_time' %}
                 <span class="badge badge-success">Full Time</span>
+                {% endif %}
               </div>
             </div>
-          </li>
-
-          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="{% url 'job-single' %}"></a>
-            <div class="job-listing-logo">
-              <img src="{% static 'home/images/job_logo_3.jpg' %}" alt="Image" class="img-fluid">
-            </div>
-
-            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
-              <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2>Back-end Engineer (Python)</h2>
-                <strong>Amazon</strong>
-              </div>
-              <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span class="icon-room"></span> Overland Park, Kansas 
-              </div>
-              <div class="job-listing-meta">
-                <span class="badge badge-success">Full Time</span>
-              </div>
-            </div>
-          </li>
-
-          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="{% url 'job-single' %}"></a>
-            <div class="job-listing-logo">
-              <img src="{% static 'home/images/job_logo_4.jpg' %}" alt="Image" class="img-fluid">
-            </div>
-
-            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
-              <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2>Senior Art Director</h2>
-                <strong>Microsoft</strong>
-              </div>
-              <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span class="icon-room"></span> Anywhere 
-              </div>
-              <div class="job-listing-meta">
-                <span class="badge badge-success">Full Time</span>
-              </div>
-            </div>
-          </li>
-
-          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="{% url 'job-single' %}"></a>
-            <div class="job-listing-logo">
-              <img src="{% static 'home/images/job_logo_5.jpg' %}" alt="Image" class="img-fluid">
-            </div>
-
-            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
-              <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2>Product Designer</h2>
-                <strong>Puma</strong>
-              </div>
-              <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span class="icon-room"></span> San Mateo, CA 
-              </div>
-              <div class="job-listing-meta">
-                <span class="badge badge-success">Full Time</span>
-              </div>
-            </div>
-          </li>
-          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="{% url 'job-single' %}"></a>
-            <div class="job-listing-logo">
-              <img src="{% static 'home/images/job_logo_1.jpg' %}" alt="Image" class="img-fluid">
-            </div>
-
-            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
-              <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2>Product Designer</h2>
-                <strong>Adidas</strong>
-              </div>
-              <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span class="icon-room"></span> New York, New York
-              </div>
-              <div class="job-listing-meta">
-                <span class="badge badge-danger">Part Time</span>
-              </div>
-            </div>
-            
-          </li>
-          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="{% url 'job-single' %}"></a>
-            <div class="job-listing-logo">
-              <img src="{% static 'home/images/job_logo_2.jpg' %}" alt="Image" class="img-fluid">
-            </div>
-           
-            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
-              <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2>Digital Marketing Director</h2>
-                <strong>Sprint</strong>
-              </div>
-              <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span class="icon-room"></span> Overland Park, Kansas 
-              </div>
-              <div class="job-listing-meta">
-                <span class="badge badge-success">Full Time</span>
-              </div>
-            </div>
-          </li>
         </ul>
 
         <div class="row pagination-wrap">
           <div class="col-md-6 text-center text-md-left mb-4 mb-md-0">
-            <span>Showing 1-7 Of 43,167 Jobs</span>
+            {% if counter > 1 %}
+            <span>Showing 1-{{ counter }} of {{counter}} jobs</span>
+            {% elif counter == 1 %}
+            <span>Showing 1-{{ counter }} of {{counter}} job</span>
+            {% endif %}
           </div>
           <div class="col-md-6 text-center text-md-right">
             <div class="custom-pagination ml-auto">
@@ -183,8 +67,19 @@
               </div>
               <a href="#" class="next">Next</a>
             </div>
+            {% else %}
+            <div class="col-md-8">
+              <h2 class="text-black">Want to keep track of certain jobs?</h2>
+              <p class="mb-0 text-grey lead">Make an account to be able to save jobs you're interested in!</p>
+            </div>
+            <div class="col-md-3 ml-auto">
+              <a href="{% url 'login' %}" class="btn btn-warning btn-block btn-lg">Log in</a>
+            </div>
+          </div>
+            {% endif %}
           </div>
         </div>
       </div>
     </section>
-    {% endblock content %}
+  
+  {% endblock %}

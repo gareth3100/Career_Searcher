@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
-{% block title %}Login{% endblock %}
-{% block meta_description %}This is the login page{% endblock %} 
+{% block title %}Signup{% endblock %}
+{% block meta_description %}This is the signup page{% endblock %} 
 {% block content %}
     <!-- HOME -->
     <section class="section-hero overlay inner-page bg-image" style="background-image: url({% static 'home/images/hero_1.jpg' %});" id="home-section">
       <div class="container">
         <div class="row">
           <div class="col-md-7">
-            <h1 class="text-white font-weight-bold">Log in</h1>
+            <h1 class="text-white font-weight-bold">Sign up</h1>
             <div class="custom-breadcrumbs">
               <a href="#">Home</a> <span class="mx-2 slash">/</span>
-              <span class="text-white"><strong>Log in</strong></span>
+              <span class="text-white"><strong>Sign up</strong></span>
             </div>
           </div>
         </div>
@@ -22,29 +22,29 @@
     <section class="site-section">
       <div class="container">
         <div class="row">
-          <div class="col-lg-6">
+          <div class="col-lg-6 mb-5">
             {% if user.is_authenticated %}
             <div class="col-md-0">
               <h2 class="text-black">You are already logged in!</h2>
             </div>
             {% else %}
-            <h2 class="mb-4">Log in</h2>
-            <form method="post" class="p-4 border rounded">
-              {% csrf_token %}
-              {{form|crispy}}
-              <div class="row form-group">
-                <div class="col-md-12">
-                  <input type="submit" value="Log In" class="btn px-4 btn-primary text-white">
-                </div>
-              </div>
-              <div class="border-top pt-3">
-                <class="text">
-                  Need an account? <a class="ml-3" href="{% url 'signup' %}">Sign up</a>
-              </class>
-            </form>
-            </div>
-            {% endif %}
           </div>
+            <h2 class="mb-4">Sign up</h2>
+            <form method="POST" class="p-4 border rounded">
+              {% csrf_token %}
+              {{ form|crispy }}
+                <div class="col-md-12">
+                  <button type="submit" class="btn px-4 btn-primary text-white">Sign up</button>
+                </div>
+                <br>     
+                <div class="border-top pt-3">
+                  <class="text">
+                    Already have an account? <a class="ml-3" href="{% url 'login' %}">Log in</a>
+                  </class>
+              </div>
+            </form>
+          </div>
+          {% endif %}
         </div>
       </div>
     </section>
