@@ -13,8 +13,11 @@ from .forms import MyUserCreationForm
 
 def index(request):
     """returns the base page"""
+    if request.method == 'GET':
 
-    if request.method == 'POST':
+        return render(request, 'index.html')
+
+    elif request.method == 'POST':
 
         job_title = request.POST['Job_Title']
         job_area = request.POST['Job_Area']
@@ -27,7 +30,6 @@ def index(request):
             job_search_url = 'https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=89169241&app_key=9730280226cca44dbc8fb53ce085e104&results_per_page=100&title_only={}&where={}&full_time=1&content-type=application/json'
 
         job_data = []
-        counter_dict = {}
         job_query_result = requests.get(job_search_url.format(job_title, job_area)).json() #this has the actual json query result
         counter = 0
 
@@ -67,30 +69,35 @@ def index(request):
 
 
         context = {'job_data' : job_data, 'counter' : counter, 'total_jobs' : total_jobs} #shove all dictionaries into here 
-        messages.success(request, {'context': context})
-        #request.session['redirect_context'] = context
-        #return render(request, 'job-listings.html', context) #can only pass in dicts so that's why we set a dict to job_data
+        request.session['context'] = context
         return redirect('/job-listings/') #need to redirect it but also want to pass in dict as well
-
-    return render(request, 'index.html')
 
 
 def job_listings(request):
     """returns the job-listings page"""
-    if request.method == 'POST':
+    if request.method == 'GET':
+        
+        get_data = request.session.get('context', False) #returns false if there is no value for 'context'
+        if get_data:
+            context = {'get_data' : get_data}
+            del(request.session['context'])
+            return render(request, 'job-listings.html', context)
+
+        return render(request, 'job-listings.html', {}) #in the case that it doesn't receive get_data, it just does this
+
+    elif request.method == 'POST':
 
         job_title = request.POST['Job_Title']
         job_area = request.POST['Job_Area']
         job_type = request.POST['Job_Type']
 
         if job_type == 'Part Time':
-            job_search_url = 'https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=89169241&app_key=9730280226cca44dbc8fb53ce085e104&results_per_page=7&title_only={}&where={}&part_time=1&content-type=application/json'
+            job_search_url = 'https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=89169241&app_key=9730280226cca44dbc8fb53ce085e104&results_per_page=100&title_only={}&where={}&part_time=1&content-type=application/json'
 
         if job_type == 'Full Time':
-            job_search_url = 'https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=89169241&app_key=9730280226cca44dbc8fb53ce085e104&results_per_page=7&title_only={}&where={}&full_time=1&content-type=application/json'
+            job_search_url = 'https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=89169241&app_key=9730280226cca44dbc8fb53ce085e104&results_per_page=100&title_only={}&where={}&full_time=1&content-type=application/json'
 
         job_data = []
-        counter_dict = {}
         job_query_result = requests.get(job_search_url.format(job_title, job_area)).json() #this has the actual json query result
         counter = 0
 
@@ -98,15 +105,16 @@ def job_listings(request):
             try:
                 job_descriptions = {
 
-                    'job_title' : job_query_result['results'][counter]['title'],
-                    'job_location' : job_query_result['results'][counter]['location']['area'][3], #this is the city
-                    'job_area' : job_query_result['results'][counter]['location']['area'][1], #this is the state
-                    'creation_date' : job_query_result['results'][counter]['created'],
-                    'company' : job_query_result['results'][counter]['company']['display_name'],
-                    'redirect_url' : job_query_result['results'][counter]['redirect_url'],
-                    'job_description' : job_query_result['results'][counter]['description'],
-                    'job_type' : job_query_result['results'][counter]['contract_time'],
-                    'has_city' : True
+                'job_title' : job_query_result['results'][counter]['title'],
+                'job_location' : job_query_result['results'][counter]['location']['area'][3], #this is the city
+                'job_area' : job_query_result['results'][counter]['location']['area'][1], #this is the state
+                'creation_date' : job_query_result['results'][counter]['created'],
+                'company' : job_query_result['results'][counter]['company']['display_name'],
+                'redirect_url' : job_query_result['results'][counter]['redirect_url'],
+                'job_description' : job_query_result['results'][counter]['description'],
+                'job_type' : job_query_result['results'][counter]['contract_time'],
+                'has_city' : True
+
                 }
                 
             except IndexError: #in case they input a state
@@ -127,12 +135,11 @@ def job_listings(request):
             job_data.append(job_descriptions) #add all that to a list of dicts we're calling "job_data"
         total_jobs = job_query_result['count']
 
+
         context = {'job_data' : job_data, 'counter' : counter, 'total_jobs' : total_jobs} #shove all dictionaries into here 
-
-        return render(request, 'job-listings.html', context) #can only pass in dicts so that's why we set a dict to job_data
-    else:
-
-        return render(request, 'job-listings.html')
+        request.session['context'] = context
+        return redirect(request.path) #need to redirect it but also want to pass in dict as well
+  
 
 def signup(request):
     """returns the signup page"""

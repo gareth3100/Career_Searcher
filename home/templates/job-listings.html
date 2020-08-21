@@ -52,16 +52,16 @@
       <div class="container">
         <div class="row mb-5 justify-content-center">
           <div class="col-md-7 text-center">
-              {% if total_jobs == 0 %}
+              {% if get_data.total_jobs == 0 %}
               <h2 class="section-title mb-2">No results found.</h2>
               {% else %}
-              <h2 class="section-title mb-2">{{ total_jobs }} result(s) found.</h2>
+              <h2 class="section-title mb-2">{{ get_data.total_jobs }} result(s) found.</h2>
           </div>
         </div>
         
         
         <ul class="job-listings mb-5">
-          {% for job_descriptions in job_data %}
+          {% for job_descriptions in get_data.job_data %} <!-- "get_data.job_data" since job_data is a dictionary within dictioanry get_data-->
           <li class="job-listing d-block d-sm-flex pb-3 pb-sm-1 pt-sm-1 align-items-center">
             <a target="_blank" href="{{ job_descriptions.redirect_url }}"></a>
             <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
