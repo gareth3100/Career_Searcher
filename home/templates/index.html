@@ -16,13 +16,13 @@
               {% csrf_token %}
               <div class="row mb-5">
                 <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                  <input type="text" class="form-control form-control-lg" name="Job_Title" placeholder="Job title">
+                  <input type="text" class="form-control form-control-lg" name="Job_Title" placeholder="Job title" required>
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                  <input type="text" class="form-control form-control-lg" name="Job_Area" placeholder="State, City, Region...">
+                  <input type="text" class="form-control form-control-lg" name="Job_Area" placeholder="State, City, Region..." required>
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                  <select class="selectpicker" data-style="btn-white btn-lg" name="Job_Type" data-width="100%" name="Job_Type" title="Select Job Type">
+                  <select class="selectpicker" data-style="btn-white btn-lg" name="Job_Type" data-width="100%" name="Job_Type" title="Select Job Type" required>
                     <option>Part Time</option>
                     <option>Full Time</option>
                   </select>
@@ -31,17 +31,17 @@
                   <button type="submit" class="btn btn-primary btn-lg btn-block text-white btn-search"><span class="icon-search icon mr-2"></span>Search Job</button>
                 </div>
               </div>
+            </form>
               <div class="row">
                 <div class="col-md-12 popular-keywords">
                   <h3>Trending Keywords:</h3>
                   <ul class="keywords list-unstyled m-0 p-0">
-                    <li><a class="">UI Designer</a></li>
-                    <li><a class="">Python</a></li>
-                    <li><a class="">Developer</a></li>
+                    <li><a class="">Software Engineer</a></li>
+                    <li><a class="">Fullstack Developer</a></li>
+                    <li><a class="">Software Developer</a></li>
                   </ul>
                 </div>
               </div>
-            </form>
           </div>
         </div>
       </div>
@@ -58,7 +58,7 @@
 
           <div class="col-6 col-md-6 col-lg-12 mb-5 mb-lg-0">
             <div class="d-flex align-items-center justify-content-center mb-2">
-              <strong class="number" data-number="120">0</strong>
+              <strong class="number" data-number="{{ num_users }}">0</strong>
             </div>
             <span class="caption">Accounts Made</span>
           </div>

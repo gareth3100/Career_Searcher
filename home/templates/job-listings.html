@@ -16,13 +16,13 @@
               {% csrf_token %}
               <div class="row mb-5">
                 <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                  <input type="text" class="form-control form-control-lg" name="Job_Title" placeholder="Job title, Company...">
+                  <input type="text" class="form-control form-control-lg" name="Job_Title" placeholder="Job title, Company..." required>
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                  <input type="text" class="form-control form-control-lg" name="Job_Area" placeholder="State, City, Region...">
+                  <input type="text" class="form-control form-control-lg" name="Job_Area" placeholder="State, City, Region..." required>
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                  <select class="selectpicker" data-style="btn-white btn-lg" name="Job_Type" data-width="100%" title="Select Job Type">
+                  <select class="selectpicker" data-style="btn-white btn-lg" name="Job_Type" data-width="100%" title="Select Job Type" required>
                     <option>Part Time</option>
                     <option>Full Time</option>
                   </select>
@@ -47,15 +47,15 @@
       </div>
     </section>
 
-    
+    {% if get_data %}
     <section class="site-section" id="next">
       <div class="container">
         <div class="row mb-5 justify-content-center">
           <div class="col-md-7 text-center">
               {% if get_data.total_jobs == 0 %}
-              <h2 class="section-title mb-2">No results found.</h2>
+                <h2 class="section-title mb-2">No results found.</h2>
               {% else %}
-              <h2 class="section-title mb-2">{{ get_data.total_jobs }} result(s) found.</h2>
+                <h2 class="section-title mb-2">{{ get_data.total_jobs }} result(s) found.</h2>
           </div>
         </div>
         
@@ -91,10 +91,12 @@
 
         <div class="row pagination-wrap">
           <div class="col-md-6 text-center text-md-left mb-4 mb-md-0">
-            {% if total_jobs > 1 %}
-            <span>Showing 1-10 of {{total_jobs}} jobs</span>
+            {% if get_data.total_jobs > 10 %}
+                <span>Showing 1-10 of {{ get_data.total_jobs}} jobs</span>
+            {% elif get_data.total_jobs == 1 %}
+              <span>Showing 1-{{ get_data.total_jobs }} of {{ get_data.total_jobs }} job</span>
             {% else %}
-            <span>Showing 1-10 of {{total_jobs}} job</span>
+              <span>Showing 1-{{ get_data.total_jobs }} of {{ get_data.total_jobs }} jobs</span>
             {% endif %}
           </div>
           <div class="col-md-6 text-center text-md-right">
@@ -113,7 +115,8 @@
         {% endif %}
       </div>
     </section>
-    
+    {% if user.is_authenticated %}
+    {% else %}
     <section class="py-5 bg-image overlay-primary fixed overlay" style="background-image: url({% static 'home/images/hero_1.jpg' %});">
       <div class="container">
         <div class="row align-items-center">
@@ -127,5 +130,9 @@
         </div>
       </div>
     </section>
+
+    {% endif %}
+    
+  {% endif %}
 
 {% endblock %}

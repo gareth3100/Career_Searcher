@@ -3,22 +3,25 @@ return a web response. Used to do things such as fetch objects from database
 modify those objects if needed, render forms, return HTML """
 
 import requests
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.urls import reverse
+from django import forms
 from .forms import MyUserCreationForm
 
 def index(request):
     """returns the base page"""
+    users = User.objects.all()
+    num_users = {'num_users' : len(users)}
     if request.method == 'GET':
-
-        return render(request, 'index.html')
+        context = {'num_users' : num_users}
+        return render(request, 'index.html', context)
 
     elif request.method == 'POST':
-
         job_title = request.POST['Job_Title']
         job_area = request.POST['Job_Area']
         job_type = request.POST['Job_Type']
@@ -68,7 +71,7 @@ def index(request):
         total_jobs = job_query_result['count']
 
 
-        context = {'job_data' : job_data, 'counter' : counter, 'total_jobs' : total_jobs} #shove all dictionaries into here 
+        context = {'job_data' : job_data, 'total_jobs' : total_jobs, 'num_users' : num_users} #shove all dictionaries into here 
         request.session['context'] = context
         return redirect('/job-listings/') #need to redirect it but also want to pass in dict as well
 
@@ -76,7 +79,6 @@ def index(request):
 def job_listings(request):
     """returns the job-listings page"""
     if request.method == 'GET':
-        
         get_data = request.session.get('context', False) #returns false if there is no value for 'context'
         if get_data:
             context = {'get_data' : get_data}
@@ -136,7 +138,7 @@ def job_listings(request):
         total_jobs = job_query_result['count']
 
 
-        context = {'job_data' : job_data, 'counter' : counter, 'total_jobs' : total_jobs} #shove all dictionaries into here 
+        context = {'job_data' : job_data, 'total_jobs' : total_jobs} #shove all dictionaries into here 
         request.session['context'] = context
         return redirect(request.path) #need to redirect it but also want to pass in dict as well
   
@@ -157,9 +159,10 @@ def signup(request):
 def log_in(request):
     """returns the login page"""
     form = MyUserCreationForm()
-    context = {'form' : form}
-    messages.success(request, "Successfully logged in. Welcome back!")
-    return render(request, 'login.html', context)
+    if form.is_valid():
+        messages.success(request, "Successfully logged in. Welcome back!")
+        return redirect('/') #this is how to change url completely
+    return render(request, 'login.html')
 
 def about(request):
     """returns the about page"""
