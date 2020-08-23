@@ -10,3 +10,7 @@ class MyUserCreationForm(UserCreationForm):
         model = User
         fields = ["username", "email", "password1", "password2"]
 
+
+class SaveThisJob(forms.Form):
+    check = forms.BooleanField(required=False)
+

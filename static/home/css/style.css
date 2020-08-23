@@ -725,7 +725,7 @@ h1, h2, h3, h4 {
       border-bottom: none; }
     .job-listings .job-listing a {
       position: absolute;
-      width: 100%;
+      width: 52%;
       height: 100%;
       -webkit-transition: .3s all ease;
       -o-transition: .3s all ease;

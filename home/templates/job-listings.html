@@ -28,16 +28,16 @@
                   </select>
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                  <button type="submit" class="btn btn-primary btn-lg btn-block text-white btn-search"><span class="icon-search icon mr-2"></span>Search Job</button>
+                  <button type="submit" name="search_job" class="btn btn-primary btn-lg btn-block text-white btn-search"><span class="icon-search icon mr-2"></span>Search Job</button>
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-12 popular-keywords">
                   <h3>Trending Keywords:</h3>
                   <ul class="keywords list-unstyled m-0 p-0">
-                    <li><a href="#" class="">UI Designer</a></li>
-                    <li><a href="#" class="">Python</a></li>
-                    <li><a href="#" class="">Developer</a></li>
+                    <li><a  class="">UI Designer</a></li>
+                    <li><a  class="">Python</a></li>
+                    <li><a class="">Developer</a></li>
                   </ul>
                 </div>
               </div>
@@ -57,8 +57,8 @@
               {% else %}
                 <h2 class="section-title mb-2">{{ get_data.total_jobs }} result(s) found.</h2>
           </div>
-        </div>
-        
+          <h5 class="text-center">Click on the job title to view the actual job application.</h5>
+        </div>   
         
         <ul class="job-listings mb-5">
           {% for job_descriptions in get_data.job_data %} <!-- "get_data.job_data" since job_data is a dictionary within dictioanry get_data-->
@@ -69,6 +69,11 @@
                 <h2>{{ job_descriptions.job_title|striptags }}</h2>
                 <strong>{{ job_descriptions.company|striptags }}</strong>
               </div>
+            
+              <label class="checkbox-inline">
+                <input type="checkbox" value=""> Save job
+              </label>
+
               <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
                 {% if job_descriptions.has_city == True %}
                 <span class="icon-room"></span> {{ job_descriptions.job_location|striptags }}, {{ job_descriptions.job_area|striptags }}
@@ -86,8 +91,17 @@
             </div>
           </li>
           {% endfor %}
-          
         </ul>
+        {% if user.is_authenticated %}
+        <form method="post" name="save_job">
+          {% csrf_token %}
+          <div class="centerize">
+            <button type="submit" name="save_job" class="btn btn-primary btn-lg btn-block text-white btn-search col-sm-4">Save all checked jobs</button>
+          </div>
+        </form>
+
+        <br>
+        {% endif %}
 
         <div class="row pagination-wrap">
           <div class="col-md-6 text-center text-md-left mb-4 mb-md-0">
