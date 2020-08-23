@@ -4,7 +4,6 @@ modify those objects if needed, render forms, return HTML """
 
 import requests
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.contrib.auth import login, authenticate
