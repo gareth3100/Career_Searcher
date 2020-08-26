@@ -10,11 +10,7 @@ class SavedJobs(models.Model):
     
 class Job(models.Model):
     saved_jobs = models.ForeignKey(SavedJobs, on_delete=models.CASCADE)
-    company = models.CharField(max_length=50)
-    job_location = models.CharField(max_length=50)
-    #job_area = models.CharField(max_length=50)
-    job_type = models.CharField(max_length=50)
-    finished = models.BooleanField()
+    check = models.BooleanField()
 
     def __str__(self):
-        return self.company
+        return self.check

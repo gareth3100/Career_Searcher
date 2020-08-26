@@ -18,68 +18,78 @@
       </div>
     </section>
 
-    <section class="site-section" id="next">
-      <div class="container">
-        <div class="row mb-5 justify-content-center">
-          {% if user.is_authenticated %}
-          <div class="col-md-7 text-center">
-            <h2 class="section-title mb-2">Hi {{ user }}. You have {{ num_saved }} job(s) saved.</h2>
-          </div>
-        </div>
-        
-        <ul class="job-listings mb-5">
-          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href=""></a>
-            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
-              <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2>{{ job_descriptions.job_title|striptags }}</h2>
-                <strong>{{ job_descriptions.company|striptags }}</strong>
-              </div>
-              <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span class="icon-room"></span> {{ job_descriptions.job_location|striptags }}, {{ job_descriptions.job_area|striptags }}
-              </div>
-              <div class="job-listing-meta">
-                {% if job_descriptions.job_type == 'part_time' %}
-                <span class="badge badge-danger">Part Time</span>
-                {% elif job_descriptions.job_type == 'full_time' %}
-                <span class="badge badge-success">Full Time</span>
-                {% endif %}
-              </div>
-            </div>
-        </ul>
+    {% if user.is_authenticated %}
+      <section class="site-section" id="next">
 
-        <div class="row pagination-wrap">
-          <div class="col-md-6 text-center text-md-left mb-4 mb-md-0">
-            {% if counter > 1 %}
-            <span>Showing 1-{{ counter }} of {{counter}} jobs</span>
-            {% elif counter == 1 %}
-            <span>Showing 1-{{ counter }} of {{counter}} job</span>
-            {% endif %}
+        <div class="container">
+          <div class="row mb-5 justify-content-center">
+            <div class="col-md-7 text-center">
+              {% if total_jobs == 0 %}
+                <h2 class="section-title mb-2">Hi {{ user }}. You have no jobs saved.</h2>
+              {% else %}
+              <h2 class="section-title mb-2">Hi {{ user }}. You have {{ total_jobs }} jobs saved.</h2>
+            </div>
           </div>
-          <div class="col-md-6 text-center text-md-right">
-            <div class="custom-pagination ml-auto">
-              <a href="#" class="prev">Prev</a>
-              <div class="d-inline-block">
-              <a href="#" class="active">1</a>
-              <a href="#">2</a>
-              <a href="#">3</a>
-              <a href="#">4</a>
+
+          <ul class="job-listings mb-5">
+            {% for job_descriptions in job_data %}
+            <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
+              <a target="_blank" href="{{ job_descriptions.redirect_url }}"></a>
+              <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+                <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+                  <h2>{{ job_descriptions.job_title|striptags }}</h2>
+                  <strong>{{ job_descriptions.company|striptags }}</strong>
+                </div>
+                <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
+                  {% if job_descriptions.has_city == True %}
+                    <span class="icon-room"></span> {{ job_descriptions.job_location|striptags }}, {{ job_descriptions.job_area|striptags }}
+                  {% else %}
+                    <span class="icon-room"></span> {{ job_descriptions.job_area|striptags }}
+                  {% endif %}
+                </div>
+                <div class="job-listing-meta">
+                  {% if job_descriptions.job_type == 'part_time' %}
+                    <span class="badge badge-danger">Part Time</span>
+                  {% elif job_descriptions.job_type == 'full_time' %}
+                    <span class="badge badge-success">Full Time</span>
+                  {% endif %}
+                </div>
               </div>
-              <a href="#" class="next">Next</a>
+            {% endfor %}
+          </ul>
+
+          <div class="row pagination-wrap">
+            <div class="col-md-6 text-center text-md-left mb-4 mb-md-0">
+              {% if counter > 1 %}
+                <span>Showing 1-{{ counter }} of {{counter}} jobs</span>
+              {% elif counter == 1 %}
+                <span>Showing 1-{{ counter }} of {{counter}} job</span>
+              {% endif %}
             </div>
-            {% else %}
-            <div class="col-md-8">
-              <h2 class="text-black">Want to keep track of certain jobs?</h2>
-              <p class="mb-0 text-grey lead">Make an account to be able to save jobs you're interested in!</p>
+            <div class="col-md-6 text-center text-md-right">
+              <div class="custom-pagination ml-auto">
+                <a href="#" class="prev">Prev</a>
+                <div class="d-inline-block">
+                <a href="#" class="active">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+              </div>
+                <a href="#" class="next">Next</a>
             </div>
-            <div class="col-md-3 ml-auto">
-              <a href="{% url 'login' %}" class="btn btn-warning btn-block btn-lg">Log in</a>
-            </div>
-          </div>
-            {% endif %}
-          </div>
+
+            {% endif %} <!--this is for if there are results-->
         </div>
+
+    {% else %}
+      <div class="col-md-8">
+        <h2 class="text-black">Want to keep track of certain jobs?</h2>
+        <p class="mb-0 text-grey lead">Make an account to be able to save jobs you're interested in!</p>
       </div>
+      <div class="col-md-3 ml-auto">
+        <a href="{% url 'login' %}" class="btn btn-warning btn-block btn-lg">Log in</a>
+      </div>
+    {% endif %}
     </section>
   
   {% endblock %}

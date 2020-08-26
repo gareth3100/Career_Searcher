@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block title %}Job Listings{% endblock %}
 {% block meta_description %}This is the job listings page{% endblock %} 
 {% block content %}
@@ -48,60 +49,60 @@
     </section>
 
     {% if get_data %}
-    <section class="site-section" id="next">
-      <div class="container">
-        <div class="row mb-5 justify-content-center">
-          <div class="col-md-7 text-center">
-              {% if get_data.total_jobs == 0 %}
-                <h2 class="section-title mb-2">No results found.</h2>
-              {% else %}
-                <h2 class="section-title mb-2">{{ get_data.total_jobs }} result(s) found.</h2>
-          </div>
-          <h5 class="text-center">Click on the job title to view the actual job application.</h5>
-        </div>   
-        
-        <ul class="job-listings mb-5">
-          {% for job_descriptions in get_data.job_data %} <!-- "get_data.job_data" since job_data is a dictionary within dictioanry get_data-->
-          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-1 pt-sm-1 align-items-center">
-            <a target="_blank" href="{{ job_descriptions.redirect_url }}"></a>
-            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
-              <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2>{{ job_descriptions.job_title|striptags }}</h2>
-                <strong>{{ job_descriptions.company|striptags }}</strong>
-              </div>
-            
-              <label class="checkbox-inline">
-                <input type="checkbox" value=""> Save job
-              </label>
+    
 
-              <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                {% if job_descriptions.has_city == True %}
-                <span class="icon-room"></span> {{ job_descriptions.job_location|striptags }}, {{ job_descriptions.job_area|striptags }}
+    <form method="post" class="save-jobs-form">
+      {% csrf_token %}
+      <section class="site-section" id="next">
+        <div class="container">
+          <div class="row mb-5 justify-content-center">
+            <div class="col-md-7 text-center">
+                {% if get_data.total_jobs == 0 %}
+                  <h2 class="section-title mb-2">No results found.</h2>
                 {% else %}
-                <span class="icon-room"></span> {{ job_descriptions.job_area|striptags }}
-                {% endif %}
-              </div>
-              <div class="job-listing-meta">
-                {% if job_descriptions.job_type == 'part_time' %}
-                <span class="badge badge-danger">Part Time</span>
-                {% else %}
-                <span class="badge badge-success">Full Time</span>
-                {% endif %}
-              </div>
+                  <h2 class="section-title mb-2">{{ get_data.total_jobs }} result(s) found.</h2>
             </div>
-          </li>
+            <h5 class="text-center">Click on the job title to view the actual job application.</h5>
+          </div>   
+          
+          <ul class="job-listings mb-5">
+            {% for job_descriptions in job_postings %} <!-- "get_data.job_data" since job_data is a dictionary within dictioanry get_data-->
+            <li class="job-listing d-block d-sm-flex pb-3 pb-sm-1 pt-sm-1 align-items-center">
+              <a target="_blank" href="{{ job_descriptions.redirect_url }}"></a>
+              <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+                <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+                  <h2>{{ job_descriptions.job_title|striptags }}</h2>
+                  <strong>{{ job_descriptions.company|striptags }}</strong>
+                </div>
+
+                {{form|crispy}}
+
+                <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
+                  {% if job_descriptions.has_city == True %}
+                    <span class="icon-room"></span> {{ job_descriptions.job_location|striptags }}, {{ job_descriptions.job_area|striptags }}
+                  {% else %}
+                    <span class="icon-room"></span> {{ job_descriptions.job_area|striptags }}
+                  {% endif %}
+                </div>
+                <div class="job-listing-meta">
+                  {% if job_descriptions.job_type == 'part_time' %}
+                    <span class="badge badge-danger">Part Time</span>
+                  {% else %}
+                    <span class="badge badge-success">Full Time</span>
+                  {% endif %}
+                </div>
+              </div>
+            </li>
           {% endfor %}
         </ul>
+
         {% if user.is_authenticated %}
-        <form method="post" name="save_job">
-          {% csrf_token %}
           <div class="centerize">
             <button type="submit" name="save_job" class="btn btn-primary btn-lg btn-block text-white btn-search col-sm-4">Save all checked jobs</button>
           </div>
-        </form>
-
         <br>
         {% endif %}
+      </form>
 
         <div class="row pagination-wrap">
           <div class="col-md-6 text-center text-md-left mb-4 mb-md-0">
@@ -113,16 +114,24 @@
               <span>Showing 1-{{ get_data.total_jobs }} of {{ get_data.total_jobs }} jobs</span>
             {% endif %}
           </div>
-          <div class="col-md-6 text-center text-md-right">
+          <div class="col-md-6 text-center text-md-right"></div>
             <div class="custom-pagination ml-auto">
-              <a href="#" class="prev">Prev</a>
               <div class="d-inline-block">
-              <a href="#" class="active">1</a>
-              <a href="#">2</a>
-              <a href="#">3</a>
-              <a href="#">4</a>
-              </div>
-              <a href="#" class="next">Next</a>
+                <span class="step-links"></span>
+                  {% if job_postings.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ job_postings.previous_page_number }}" class="prev">Previous</a>
+                  {% endif %}
+                
+              <span class="current">
+                  Page {{ job_postings.number }} of {{ job_postings.paginator.num_pages }}.
+              </span>
+      
+              {% if job_postings.has_next %}
+                  <a href="?page={{ job_postings.next_page_number }}" class="next">Next</a>
+                  <a href="?page={{ job_postings.paginator.num_pages }}" class="next">Last &raquo;</a>
+              {% endif %}
+            </span> 
             </div>
           </div>
         </div>

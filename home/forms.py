@@ -12,5 +12,5 @@ class MyUserCreationForm(UserCreationForm):
 
 
 class SaveThisJob(forms.Form):
-    check = forms.BooleanField(required=False)
+    Save_job = forms.BooleanField(required=False)
 

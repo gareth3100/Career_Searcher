@@ -5,14 +5,14 @@ modify those objects if needed, render forms, return HTML """
 import requests
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-from django.core.mail import send_mail
-from django.contrib.auth import login, authenticate
 from django.contrib import messages
-from django.urls import reverse
 from django import forms
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.views.generic.list import ListView
 from .forms import MyUserCreationForm
 from .models import SavedJobs, Job
 from .forms import SaveThisJob
+
 
 def index(request):
     """returns the base page"""
@@ -26,6 +26,8 @@ def index(request):
         job_title = request.POST['Job_Title']
         job_area = request.POST['Job_Area']
         job_type = request.POST['Job_Type']
+
+        job_info = {'job_title' : job_title, 'job_area' : job_area , 'job_type' : job_type}
 
         if job_type == 'Part Time':
             job_search_url = 'https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=89169241&app_key=9730280226cca44dbc8fb53ce085e104&results_per_page=100&title_only={}&where={}&part_time=1&content-type=application/json'
@@ -49,7 +51,8 @@ def index(request):
                 'redirect_url' : job_query_result['results'][counter]['redirect_url'],
                 'job_description' : job_query_result['results'][counter]['description'],
                 'job_type' : job_query_result['results'][counter]['contract_time'],
-                'has_city' : True
+                'has_city' : True,
+                'index' : counter,
 
                 }
                 
@@ -57,22 +60,21 @@ def index(request):
                 job_descriptions = {
 
                     'job_title' : job_query_result['results'][counter]['title'],
-                    #'job_location' : job_query_result['results'][counter]['location']['area'][3], #this is the city
                     'job_area' : job_query_result['results'][counter]['location']['area'][1], #this is the state
                     'creation_date' : job_query_result['results'][counter]['created'],
                     'company' : job_query_result['results'][counter]['company']['display_name'],
                     'redirect_url' : job_query_result['results'][counter]['redirect_url'],
                     'job_description' : job_query_result['results'][counter]['description'],
                     'job_type' : job_query_result['results'][counter]['contract_time'],
-                    'has_city' : False
+                    'has_city' : False,
+                    'index' : counter,
 
                 }
             counter += 1 #move on to next job
             job_data.append(job_descriptions) #add all that to a list of dicts we're calling "job_data"
         total_jobs = job_query_result['count']
 
-
-        context = {'job_data' : job_data, 'total_jobs' : total_jobs, 'num_users' : num_users} #shove all dictionaries into here 
+        context = {'job_data' : job_data, 'total_jobs' : total_jobs, 'num_users' : num_users, 'job_info' : job_info} #shove all dictionaries into here 
         request.session['context'] = context
         return redirect('/job-listings/') #need to redirect it but also want to pass in dict as well
 
@@ -83,7 +85,16 @@ def job_listings(request):
         form = SaveThisJob()
         get_data = request.session.get('context', False) #returns false if there is no value for 'context'
         if get_data:
-            context = {'get_data' : get_data}
+            paginator = Paginator(get_data['job_data'], 10)
+            page = request.GET.get('page') #this is how we can call the url by typing ?page=1 or ?page=2
+            try:
+                job_postings = paginator.get_page(page)
+            except PageNotAnInteger:
+                job_postings = paginator.page(1)
+            except EmptyPage:
+                job_postings = paginator.page(paginator.num_pages)
+
+            context = {'get_data' : get_data, 'form' : form, 'job_postings' : job_postings}
             del(request.session['context'])
             return render(request, 'job-listings.html', context)
 
@@ -118,7 +129,8 @@ def job_listings(request):
                     'redirect_url' : job_query_result['results'][counter]['redirect_url'],
                     'job_description' : job_query_result['results'][counter]['description'],
                     'job_type' : job_query_result['results'][counter]['contract_time'],
-                    'has_city' : True
+                    'has_city' : True,
+                    'index' : counter,
 
                     }
                     
@@ -133,7 +145,8 @@ def job_listings(request):
                         'redirect_url' : job_query_result['results'][counter]['redirect_url'],
                         'job_description' : job_query_result['results'][counter]['description'],
                         'job_type' : job_query_result['results'][counter]['contract_time'],
-                        'has_city' : False
+                        'has_city' : False,
+                        'index' : counter,
 
                     }
                 counter += 1 #move on to next job
@@ -146,8 +159,20 @@ def job_listings(request):
             return redirect(request.path) #need to redirect it but also want to pass in dict as well
 
         elif 'save_job' in request.POST: #save all jobs button at end
-            return render(request, 'signup.html', {})
+            form = SaveThisJob(request.POST)
+            if form.is_valid():
+                job = form.cleaned_data['Save_job'] #this only gets the last checked box I believe
+                selected_jobs = request.POST.getlist('Save_job') #this one gets all the boxes that are checked
+                print(selected_jobs) #this prints out ['on', 'on', 'on'] for some reason
+                return redirect(request.path)
 
+
+def saved_jobs(request):
+    """returns the saved-jobs page"""
+    #user = request.user
+    #context = {"user" : user}
+
+    return render(request, 'saved-jobs.html', {}) #in the case that it doesn't receive get_data, it just does this
   
 
 def signup(request):
@@ -174,9 +199,3 @@ def log_in(request):
 def about(request):
     """returns the about page"""
     return render(request, 'about.html', {})
-
-def saved_jobs(request):
-    """returns the saved-jobs page"""
-    user = request.user
-    context = {"user" : user}
-    return render(request, 'saved-jobs.html', context)
