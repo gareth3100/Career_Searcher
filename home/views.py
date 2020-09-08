@@ -258,10 +258,12 @@ def saved_jobs(request):
         if request.user.is_authenticated:
             form = RemoveThisJob()
             filter_user = SavedJobs.objects.filter(user=request.user).order_by('id') #filters jobs by user that is logged in
-            num_objects = filter_user.count()
+
             paginator = Paginator(filter_user, 10)
-            page = request.GET.get('page')
-            try:
+            num_objects = paginator.count 
+            page = request.GET.get('page') 
+
+            try: 
                 job_postings = paginator.get_page(page)
             except PageNotAnInteger:
                 job_postings = paginator.page(1)

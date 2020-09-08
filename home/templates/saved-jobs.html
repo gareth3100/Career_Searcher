@@ -34,7 +34,7 @@
           </div>
 
         <ul class="job-listings mb-5">
-          {% for job_descriptions in jobs %}
+          {% for job_descriptions in job_postings %}
           <li class="job-listing d-block d-sm-flex pb-3 pb-sm-1 pt-sm-1 align-items-center">
             <a target="_blank" href="{{ job_descriptions.redirect_url }}"></a>
             <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -100,8 +100,7 @@
             </div>
           </div>
         </div>
-
-              {% endif %} <!--this is for if count == 0-->
+       {% endif %} <!--this is for if count == 0-->
       </div>
     </section>
 
