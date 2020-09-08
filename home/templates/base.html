@@ -51,10 +51,23 @@
 
           <nav class="mx-auto site-navigation">
             <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
-              <!--<li><a href="index.html" class="nav-link active">Home</a></li> -->
+              {% if request.path == "/" %}
               <li><a href="{% url 'index' %}" class="nav-link active">Home</a></li> <!-- Oh have to take out the index.html in href for it to work-->
               <li><a href="{% url 'about' %}">About</a></li>
               <li><a href="{% url 'saved-jobs' %}">Saved Jobs</a></li>
+              {% elif request.path == "/about/" %}
+              <li><a href="{% url 'index' %}" >Home</a></li> <!-- Oh have to take out the index.html in href for it to work-->
+              <li><a href="{% url 'about' %}" class="nav-link active">About</a></li>
+              <li><a href="{% url 'saved-jobs' %}">Saved Jobs</a></li>
+              {% elif request.path == "/saved-jobs/" %}
+              <li><a href="{% url 'index' %}" >Home</a></li> <!-- Oh have to take out the index.html in href for it to work-->
+              <li><a href="{% url 'about' %}">About</a></li>
+              <li><a href="{% url 'saved-jobs' %}" class="nav-link active">Saved Jobs</a></li>
+              {% else %}
+              <li><a href="{% url 'index' %}" >Home</a></li> <!-- Oh have to take out the index.html in href for it to work-->
+              <li><a href="{% url 'about' %}">About</a></li>
+              <li><a href="{% url 'saved-jobs' %}">Saved Jobs</a></li>
+              {% endif %}
             </ul>
           </nav>
           

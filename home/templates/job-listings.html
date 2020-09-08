@@ -36,9 +36,9 @@
                 <div class="col-md-12 popular-keywords">
                   <h3>Trending Keywords:</h3>
                   <ul class="keywords list-unstyled m-0 p-0">
-                    <li><a  class="">UI Designer</a></li>
-                    <li><a  class="">Python</a></li>
-                    <li><a class="">Developer</a></li>
+                    <li><a  class="">Software Engineer</a></li>
+                    <li><a  class="">Fullstack Developer</a></li>
+                    <li><a class="">Software Developer</a></li>
                   </ul>
                 </div>
               </div>
@@ -60,7 +60,7 @@
                 {% if get_data.total_jobs == 0 %}
                   <h2 class="section-title mb-2">No results found.</h2>
                 {% else %}
-                  <h2 class="section-title mb-2">{{ get_data.total_jobs }} result(s) found.</h2>
+                  <h2 class="section-title mb-2">{{ job_postings.paginator.count }} result(s) found.</h2>
             </div>
             <h5 class="text-center">Click on the job title to view the actual job application.</h5>
           </div>   
@@ -75,7 +75,9 @@
                   <strong>{{ job_descriptions.company|striptags }}</strong>
                 </div>
 
-                {{form|crispy}}
+                <label class="checkbox-inline">
+                  Save job <input type="checkbox" name="save" value="{{ job_descriptions.job_title|striptags }}; {{ job_descriptions.job_location|striptags }}; {{ job_descriptions.job_area|striptags }}; {{ job_descriptions.company|striptags }}; {{ job_descriptions.job_type }}; {{ job_descriptions.redirect_url }}" >
+                </label>
 
                 <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
                   {% if job_descriptions.has_city == True %}
@@ -98,6 +100,11 @@
 
         {% if user.is_authenticated %}
           <div class="centerize">
+            {% for page in job_postings.paginator.page_range %}
+              {% if page == job_postings.number %}
+                <input type="hidden" name="next" value="{{ request.path }}?page={{ page }}">
+              {% endif %}
+            {% endfor %}
             <button type="submit" name="save_job" class="btn btn-primary btn-lg btn-block text-white btn-search col-sm-4">Save all checked jobs</button>
           </div>
         <br>
@@ -105,21 +112,12 @@
       </form>
 
         <div class="row pagination-wrap">
-          <div class="col-md-6 text-center text-md-left mb-4 mb-md-0">
-            {% if get_data.total_jobs > 10 %}
-                <span>Showing 1-10 of {{ get_data.total_jobs}} jobs</span>
-            {% elif get_data.total_jobs == 1 %}
-              <span>Showing 1-{{ get_data.total_jobs }} of {{ get_data.total_jobs }} job</span>
-            {% else %}
-              <span>Showing 1-{{ get_data.total_jobs }} of {{ get_data.total_jobs }} jobs</span>
-            {% endif %}
-          </div>
           <div class="col-md-6 text-center text-md-right"></div>
             <div class="custom-pagination ml-auto">
               <div class="d-inline-block">
                 <span class="step-links"></span>
                   {% if job_postings.has_previous %}
-                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page=1" class="next">&laquo; First</a>
                     <a href="?page={{ job_postings.previous_page_number }}" class="prev">Previous</a>
                   {% endif %}
                 
@@ -130,8 +128,7 @@
               {% if job_postings.has_next %}
                   <a href="?page={{ job_postings.next_page_number }}" class="next">Next</a>
                   <a href="?page={{ job_postings.paginator.num_pages }}" class="next">Last &raquo;</a>
-              {% endif %}
-            </span> 
+              {% endif %} 
             </div>
           </div>
         </div>

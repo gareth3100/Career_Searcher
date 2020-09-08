@@ -1,5 +1,6 @@
 """docstring"""
 from django.contrib import admin
+from .models import SavedJobs
 
-# Register your models here.
+admin.site.register(SavedJobs)
 

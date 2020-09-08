@@ -14,3 +14,6 @@ class MyUserCreationForm(UserCreationForm):
 class SaveThisJob(forms.Form):
     Save_job = forms.BooleanField(required=False)
 
+class RemoveThisJob(forms.Form):
+    Remove_job = forms.BooleanField(required=False)
+
