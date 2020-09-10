@@ -157,6 +157,7 @@ def job_listings(request):
         total_jobs = job_query_result['count']
 
         context = {'job_data' : job_data, 'total_jobs' : total_jobs, 'num_users' : num_users, 'job_info' : job_info} #shove all dictionaries into here 
+        request.session['context'] = context
         return redirect('/job-listings/?page=1') #need to redirect it but also want to pass in dict as well
 
 
